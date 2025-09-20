@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú - Flores Amarillas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #0a0a23 0%, #1a1a3a 50%, #2a2a5a 100%);
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Estrellas fijas para el menú */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .star.large {
+            width: 3px;
+            height: 3px;
+            background: #FFD700;
+            box-shadow: 0 0 6px #FFD700;
+        }
+
+        .star.medium {
+            width: 2px;
+            height: 2px;
+            background: #87CEEB;
+            box-shadow: 0 0 4px #87CEEB;
+        }
+
+        .star.small {
+            width: 1px;
+            height: 1px;
+            background: #F0F8FF;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .menu-container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        .menu-title {
+            font-size: 4rem;
+            color: #FFD700;
+            text-shadow: 
+                2px 2px 4px rgba(0,0,0,0.8),
+                0 0 20px rgba(255, 215, 0, 0.6);
+            margin-bottom: 3rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 
+                    2px 2px 4px rgba(0,0,0,0.8),
+                    0 0 20px rgba(255, 215, 0, 0.6);
+            }
+            to {
+                text-shadow: 
+                    2px 2px 4px rgba(0,0,0,0.8),
+                    0 0 30px rgba(255, 215, 0, 0.8),
+                    0 0 40px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        .menu-subtitle {
+            font-size: 1.5rem;
+            color: #FFEB3B;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .menu-button {
+            padding: 1.5rem 4rem;
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border: none;
+            border-radius: 50px;
+            color: #0a0a23;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 8px 20px rgba(255, 215, 0, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .menu-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .menu-button:hover::before {
+            left: 100%;
+        }
+
+        .menu-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 15px 30px rgba(255, 215, 0, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .menu-button:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-container {
+            animation: fadeIn 1s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="menu-container">
+        <h1 class="menu-title">🌻 Flores Amarillas 🌻</h1>
+        <p class="menu-subtitle">Elige para quién son estas flores especiales</p>
+        
+        <div class="menu-buttons">
+            <a href="flores-hh.html" class="menu-button">Para HH 💛</a>
+            <a href="flores-jj.html" class="menu-button">Para JJ 💛</a>
+            <a href="flores-ll.html" class="menu-button">Para LL 💛</a>
+        </div>
+    </div>
+
+    <script>
+        // Crear estrellas para el menú
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Diferentes tipos de estrellas
+                const rand = Math.random();
+                if (rand > 0.9) {
+                    star.classList.add('large');
+                } else if (rand > 0.7) {
+                    star.classList.add('medium');
+                } else {
+                    star.classList.add('small');
+                }
+                
+                // Posición aleatoria
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // Delay aleatorio para la animación
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Crear estrellas al cargar la página
+        window.addEventListener('load', createStars);
+    </script>
+</body>
+</html>

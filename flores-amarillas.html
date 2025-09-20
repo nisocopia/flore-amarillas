@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flores Amarillas Para Ti</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #0a0a23 0%, #1a1a3a 50%, #2a2a5a 100%);
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Estrellas fijas */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .star.large {
+            width: 3px;
+            height: 3px;
+            background: #FFD700;
+            box-shadow: 0 0 6px #FFD700;
+        }
+
+        .star.medium {
+            width: 2px;
+            height: 2px;
+            background: #87CEEB;
+            box-shadow: 0 0 4px #87CEEB;
+        }
+
+        .star.small {
+            width: 1px;
+            height: 1px;
+            background: #F0F8FF;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Estrellas fugaces */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(45deg, #fff, #FFD700);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 6px #fff,
+                0 0 12px #FFD700,
+                0 0 18px #FFD700;
+        }
+
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 50px;
+            height: 1px;
+            background: linear-gradient(to left, transparent, #FFD700, #fff);
+            transform: translateY(-50%);
+        }
+
+        .shooting-star:nth-child(1) {
+            top: 20%;
+            right: 100%;
+            animation: shoot1 6s linear infinite;
+            animation-delay: 0s;
+        }
+
+        .shooting-star:nth-child(2) {
+            top: 40%;
+            right: 100%;
+            animation: shoot2 8s linear infinite;
+            animation-delay: 3s;
+        }
+
+        .shooting-star:nth-child(3) {
+            top: 60%;
+            right: 100%;
+            animation: shoot3 7s linear infinite;
+            animation-delay: 6s;
+        }
+
+        @keyframes shoot1 {
+            0% {
+                transform: translateX(-100px) translateY(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-200px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shoot2 {
+            0% {
+                transform: translateX(-100px) translateY(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-300px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shoot3 {
+            0% {
+                transform: translateX(-100px) translateY(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-150px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        .title {
+            font-size: 4rem;
+            color: #FFD700;
+            text-shadow: 
+                2px 2px 4px rgba(0,0,0,0.8),
+                0 0 20px rgba(255, 215, 0, 0.6),
+                0 0 40px rgba(255, 215, 0, 0.4);
+            margin-bottom: 2rem;
+            animation: fadeInDown 2s ease-out;
+            text-align: center;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bouquet {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: 2rem 0;
+            animation: bounceIn 2s ease-out 0.5s both;
+            filter: drop-shadow(0 10px 20px rgba(255, 193, 7, 0.3));
+        }
+
+        .bouquet::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(255, 235, 59, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 0;
+            left: 0;
+            animation: breathe 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .flower {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            animation: gentleFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-8px) rotate(1deg);
+            }
+            66% {
+                transform: translateY(-4px) rotate(-1deg);
+            }
+        }
+
+        .flower:nth-child(1) {
+            top: 40px;
+            left: 120px;
+            animation-delay: 0s;
+        }
+
+        .flower:nth-child(2) {
+            top: 90px;
+            left: 60px;
+            animation-delay: 1s;
+        }
+
+        .flower:nth-child(3) {
+            top: 90px;
+            left: 180px;
+            animation-delay: 2s;
+        }
+
+        .flower:nth-child(4) {
+            top: 140px;
+            left: 30px;
+            animation-delay: 3s;
+        }
+
+        .flower:nth-child(5) {
+            top: 140px;
+            left: 120px;
+            animation-delay: 4s;
+        }
+
+        .flower:nth-child(6) {
+            top: 140px;
+            left: 210px;
+            animation-delay: 0.5s;
+        }
+
+        .flower:nth-child(7) {
+            top: 200px;
+            left: 80px;
+            animation-delay: 1.5s;
+        }
+
+        .flower:nth-child(8) {
+            top: 200px;
+            left: 160px;
+            animation-delay: 2.5s;
+        }
+
+        /* Nueva estructura de flor súper mejorada y realista */
+        .simple-flower {
+            position: relative;
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Pétalos externos - más grandes */
+        .simple-flower::before {
+            content: '';
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: radial-gradient(ellipse at 30% 30%, #FFEB3B 0%, #FFD54F 50%, #FFC107 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 
+                18px 0 0 -3px #FFD54F,
+                -18px 0 0 -3px #FFD54F,
+                0 18px 0 -3px #FFD54F,
+                0 -18px 0 -3px #FFD54F,
+                13px 13px 0 -6px #FFCA28,
+                -13px -13px 0 -6px #FFCA28,
+                13px -13px 0 -6px #FFCA28,
+                -13px 13px 0 -6px #FFCA28;
+            filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+            animation: petalGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes petalGlow {
+            0%, 100% {
+                filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3)) brightness(1);
+            }
+            50% {
+                filter: drop-shadow(0 4px 8px rgba(255, 193, 7, 0.5)) brightness(1.1);
+            }
+        }
+
+        /* Centro de la flor - más detallado */
+        .simple-flower::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: radial-gradient(circle at 40% 40%, #FF8F00 0%, #E65100 70%, #BF360C 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 
+                inset 2px 2px 4px rgba(0,0,0,0.3),
+                0 1px 3px rgba(229, 81, 0, 0.4);
+            z-index: 10;
+        }
+
+        /* Agregar textura al centro */
+        .simple-flower {
+            position: relative;
+        }
+
+        .simple-flower:hover::before {
+            animation-duration: 2s;
+        }
+
+        .simple-flower:hover::after {
+            transform: translate(-50%, -50%) scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stem {
+            position: absolute;
+            width: 5px;
+            height: 90px;
+            background: linear-gradient(to bottom, #4CAF50 0%, #388E3C 50%, #2E7D32 100%);
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+            box-shadow: 
+                inset 1px 0 0 rgba(255,255,255,0.3),
+                2px 0 4px rgba(0,0,0,0.2);
+        }
+
+        .leaf {
+            position: absolute;
+            width: 24px;
+            height: 12px;
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 50%, #81C784 100%);
+            border-radius: 0 100% 0 100%;
+            top: 30px;
+            left: -12px;
+            transform: rotate(-35deg);
+            animation: leafSway 5s ease-in-out infinite;
+            box-shadow: 
+                inset 1px 1px 2px rgba(255,255,255,0.3),
+                1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .leaf::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 9px;
+            background: linear-gradient(135deg, #66BB6A 0%, #81C784 50%, #A5D6A7 100%);
+            border-radius: 0 100% 0 100%;
+            top: 18px;
+            left: 10px;
+            transform: rotate(70deg);
+            box-shadow: inset 1px 1px 1px rgba(255,255,255,0.2);
+        }
+
+        /* Venas de las hojas */
+        .leaf::before {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 8px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+            top: 2px;
+            left: 50%;
+            transform: translateX(-50%) rotate(10deg);
+        }
+
+        @keyframes leafSway {
+            0%, 100% {
+                transform: rotate(-35deg);
+            }
+            25% {
+                transform: rotate(-30deg) translateY(-1px);
+            }
+            75% {
+                transform: rotate(-40deg) translateY(1px);
+            }
+        }
+
+        .floating-petals {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-petal {
+            position: absolute;
+            width: 8px;
+            height: 12px;
+            background: linear-gradient(45deg, #FFD54F, #FFC107, #FFCA28);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: float 10s linear infinite;
+            opacity: 0.8;
+            box-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .message {
+            font-size: 3.5rem;
+            color: #FFD700;
+            text-shadow: 
+                2px 2px 4px rgba(0,0,0,0.8),
+                0 0 20px rgba(255, 215, 0, 0.6),
+                0 0 40px rgba(255, 215, 0, 0.4);
+            margin-top: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+            text-align: center;
+            font-weight: bold;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FFFF00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        .heart4 {
+            bottom: 30%;
+            right: 10%;
+            animation-delay: 3s;
+        }
+
+        /* Estilos del menú */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 35, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .menu-overlay.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .menu-title {
+            font-size: 3rem;
+            color: #FFD700;
+            text-shadow: 
+                2px 2px 4px rgba(0,0,0,0.8),
+                0 0 20px rgba(255, 215, 0, 0.6);
+            margin-bottom: 3rem;
+            text-align: center;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 
+                    2px 2px 4px rgba(0,0,0,0.8),
+                    0 0 20px rgba(255, 215, 0, 0.6);
+            }
+            to {
+                text-shadow: 
+                    2px 2px 4px rgba(0,0,0,0.8),
+                    0 0 30px rgba(255, 215, 0, 0.8),
+                    0 0 40px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .menu-button {
+            padding: 1.5rem 3rem;
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border: none;
+            border-radius: 50px;
+            color: #0a0a23;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 8px 20px rgba(255, 215, 0, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .menu-button:hover::before {
+            left: 100%;
+        }
+
+        .menu-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 15px 30px rgba(255, 215, 0, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .menu-button:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #FFD700;
+            border-radius: 30px;
+            color: #FFD700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menú de selección -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-title">🌻 Flores Amarillas 🌻</div>
+        <div class="menu-buttons">
+            <button class="menu-button" onclick="showFlowers('hh')">Para HH 💛</button>
+            <button class="menu-button" onclick="showFlowers('jj')">Para JJ 💛</button>
+            <button class="menu-button" onclick="showFlowers('ll')">Para LL 💛</button>
+        </div>
+    </div>
+
+    <!-- Botón para volver al menú -->
+    <button class="back-button" id="backButton" onclick="showMenu()" style="display: none;">← Volver al Menú</button>
+
+    <!-- Contenido principal -->
+    <div class="main-content" id="mainContent">
+        <div class="stars" id="stars"></div>
+        
+        <div class="shooting-stars">
+            <div class="shooting-star"></div>
+            <div class="shooting-star"></div>
+            <div class="shooting-star"></div>
+        </div>
+        
+        <div class="floating-petals" id="petals"></div>
+    
+    <div class="container">
+        <h1 class="title">Flores Amarillas</h1>
+        
+        <div class="bouquet">
+            <div class="flower">
+                <div class="simple-flower"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                </div>
+            </div>
+            
+            <div class="flower">
+                <div class="simple-flower"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                </div>
+            </div>
+            
+            <div class="flower">
+                <div class="simple-flower"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                </div>
+            </div>
+            
+            <div class="flower">
+                <div class="simple-flower"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                </div>
+            </div>
+            
+            <div class="flower">
+                <div class="simple-flower"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                </div>
+            </div>
+            
+            <div class="flower">
+                <div class="simple-flower"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                </div>
+            </div>
+            
+            <div class="flower">
+                <div class="simple-flower"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                </div>
+            </div>
+            
+            <div class="flower">
+                <div class="simple-flower"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="message" id="messageText">Para ti hh ❤️</div>
+    </div>
+    </div> <!-- Cierre del main-content -->
+
+    <script>
+        // Variables globales
+        let currentRecipient = '';
+
+        // Funciones del menú
+        function showFlowers(recipient) {
+            currentRecipient = recipient;
+            
+            // Ocultar menú
+            document.getElementById('menuOverlay').classList.add('hidden');
+            
+            // Mostrar contenido principal
+            document.getElementById('mainContent').classList.add('visible');
+            document.getElementById('backButton').style.display = 'block';
+            
+            // Actualizar mensaje
+            const messageElement = document.getElementById('messageText');
+            messageElement.textContent = `Para ti ${recipient.toUpperCase()} ❤️`;
+            
+            // Inicializar efectos
+            setTimeout(() => {
+                createStars();
+                startFloatingPetals();
+            }, 500);
+        }
+
+        function showMenu() {
+            // Ocultar contenido principal
+            document.getElementById('mainContent').classList.remove('visible');
+            document.getElementById('backButton').style.display = 'none';
+            
+            // Mostrar menú
+            document.getElementById('menuOverlay').classList.remove('hidden');
+            
+            // Limpiar efectos
+            document.getElementById('stars').innerHTML = '';
+            document.getElementById('petals').innerHTML = '';
+            
+            // Limpiar intervalos
+            clearInterval(window.petalInterval);
+        }
+
+        // Crear estrellas fijas
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            starsContainer.innerHTML = ''; // Limpiar estrellas anteriores
+            const starCount = 200;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Diferentes tipos de estrellas
+                const rand = Math.random();
+                if (rand > 0.9) {
+                    star.classList.add('large');
+                } else if (rand > 0.7) {
+                    star.classList.add('medium');
+                } else {
+                    star.classList.add('small');
+                }
+                
+                // Posición aleatoria
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // Delay aleatorio para la animación
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Crear pétalos flotantes
+        function createFloatingPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'floating-petal';
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 5 + 8) + 's';
+            petal.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.getElementById('petals').appendChild(petal);
+            
+            setTimeout(() => {
+                if (petal.parentNode) {
+                    petal.remove();
+                }
+            }, 15000);
+        }
+
+        function startFloatingPetals() {
+            // Crear pétalos cada 2 segundos
+            window.petalInterval = setInterval(createFloatingPetal, 2000);
+            
+            // Crear algunos pétalos iniciales
+            for(let i = 0; i < 5; i++) {
+                setTimeout(createFloatingPetal, i * 500);
+            }
+        }
+
+        // Inicializar la página mostrando el menú
+        window.addEventListener('load', function() {
+            document.getElementById('mainContent').classList.remove('visible');
+        });
+    </script>
+</body>
+</html>
