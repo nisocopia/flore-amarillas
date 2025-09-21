@@ -562,7 +562,7 @@
 </head>
 <body>
     <!-- Audio de fondo -->
-    <audio id="backgroundMusic" loop>
+    <audio id="backgroundMusic" loop autoplay>
         <source src="Floricienta — Flores Amarillas [Letra].mp3" type="audio/mpeg">
         <source src="https://ia804608.us.archive.org/9/items/flores-amarillas/Flores%20Amarillas.mp3" type="audio/mpeg">
         <source src="https://archive.org/download/floricienta-flores-amarillas/Floricienta%20-%20Flores%20Amarillas.mp3" type="audio/mpeg">
@@ -725,15 +725,35 @@
                 setTimeout(createFloatingPetal, i * 500);
             }
 
-            setTimeout(() => {
-                audio.play().then(() => {
+            // Configurar el audio para autoplay más agresivo
+            audio.muted = false;
+            audio.volume = 0.7;
+            
+            // Intentar reproducir inmediatamente
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Autoplay funcionó
+                    console.log('Autoplay iniciado correctamente');
                     isPlaying = true;
-                    musicIcon.textContent = '🎵';
-                    musicText.textContent = 'Pausar';
+                    musicIcon.textContent = '�';
+                    musicText.textContent = 'Flores Amarillas';
+                    musicControl.classList.remove('muted');
                 }).catch(() => {
-                    console.log('Reproducción automática bloqueada por el navegador');
+                    // Autoplay fue bloqueado, intentar con interacción del usuario
+                    console.log('Autoplay bloqueado, configurando para activación manual');
+                    document.addEventListener('click', function startOnFirstClick() {
+                        audio.play().then(() => {
+                            isPlaying = true;
+                            musicIcon.textContent = '🌻';
+                            musicText.textContent = 'Flores Amarillas';
+                            musicControl.classList.remove('muted');
+                        });
+                        document.removeEventListener('click', startOnFirstClick);
+                    }, { once: true });
                 });
-            }, 2000);
+            }
         });
 
         // Crear estrellas fijas
