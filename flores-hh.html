@@ -514,9 +514,68 @@
                 opacity: 0.8;
             }
         }
+
+        /* Estilos para el reproductor de música */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #FFD700;
+            border-radius: 50px;
+            padding: 15px 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #FFD700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        .music-icon {
+            font-size: 1.2rem;
+            animation: musicPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .music-control.muted .music-icon {
+            animation: none;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
+    <!-- Audio de fondo -->
+    <audio id="backgroundMusic" loop>
+        <!-- Nota: Para usar "Flores Amarillas" de Floricienta necesitarás subir el archivo MP3 -->
+        <!-- Por ahora usamos música libre de derechos similar -->
+        <source src="https://archive.org/download/MusOpen-DiscoverySet-Sampler/01-Bach-Brandenburg_Concerto_1-1_Allegro-MusOpen.mp3" type="audio/mpeg">
+        <source src="flores-amarillas.mp3" type="audio/mpeg">
+        Tu navegador no soporta audio HTML5.
+    </audio>
+
+    <!-- Control de música -->
+    <div class="music-control" id="musicControl" onclick="toggleMusic()">
+        <span class="music-icon" id="musicIcon">🌻</span>
+        <span id="musicText">Flores Amarillas</span>
+    </div>
+
     <div class="stars" id="stars"></div>
     
     <div class="shooting-stars">
@@ -592,6 +651,96 @@
     </div>
 
     <script>
+        // Variables para el control de música
+        let isPlaying = false;
+        const audio = document.getElementById('backgroundMusic');
+        const musicControl = document.getElementById('musicControl');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+
+        // Función para reproducir/pausar música
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.textContent = '🔇';
+                musicText.textContent = 'Activar música';
+                musicControl.classList.add('muted');
+                isPlaying = false;
+            } else {
+                audio.play().catch(e => {
+                    console.log('Error al reproducir audio:', e);
+                    showMusicPrompt();
+                });
+                musicIcon.textContent = '🌻';
+                musicText.textContent = 'Flores Amarillas';
+                musicControl.classList.remove('muted');
+                isPlaying = true;
+            }
+        }
+
+        // Mostrar prompt si el audio no se puede reproducir automáticamente
+        function showMusicPrompt() {
+            const prompt = document.createElement('div');
+            prompt.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(255, 215, 0, 0.95);
+                color: #0a0a23;
+                padding: 30px;
+                border-radius: 20px;
+                text-align: center;
+                z-index: 2000;
+                font-weight: bold;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                max-width: 400px;
+            `;
+            prompt.innerHTML = `
+                <div style="font-size: 1.2rem; margin-bottom: 15px;">🌻 Flores Amarillas 🌻</div>
+                <div style="margin-bottom: 20px;">¿Quieres escuchar "Flores Amarillas" de Floricienta mientras ves el regalo?</div>
+                <button onclick="startMusic(); this.parentElement.remove();" 
+                        style="margin: 10px; padding: 12px 25px; background: #FFD700; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 1rem;">
+                    🎵 ¡Sí, quiero escucharla! 🎵
+                </button>
+                <button onclick="this.parentElement.remove();" 
+                        style="margin: 10px; padding: 12px 25px; background: #ccc; border: none; border-radius: 25px; cursor: pointer; font-size: 1rem;">
+                    Solo ver las flores
+                </button>
+            `;
+            document.body.appendChild(prompt);
+        }
+
+        // Función para iniciar música desde el prompt
+        function startMusic() {
+            audio.play();
+            musicIcon.textContent = '🌻';
+            musicText.textContent = 'Flores Amarillas';
+            musicControl.classList.remove('muted');
+            isPlaying = true;
+        }
+
+        // Intentar reproducir música automáticamente al cargar la página
+        window.addEventListener('load', function() {
+            createStars();
+            setInterval(createFloatingPetal, 2000);
+            for(let i = 0; i < 5; i++) {
+                setTimeout(createFloatingPetal, i * 500);
+            }
+
+            // Mostrar prompt de música después de que las flores aparezcan
+            setTimeout(() => {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    musicIcon.textContent = '🌻';
+                    musicText.textContent = 'Flores Amarillas';
+                }).catch(() => {
+                    // Si no se puede reproducir automáticamente, mostrar prompt
+                    showMusicPrompt();
+                });
+            }, 3000);
+        });
+
         // Crear estrellas fijas
         function createStars() {
             const starsContainer = document.getElementById('stars');
@@ -601,7 +750,6 @@
                 const star = document.createElement('div');
                 star.className = 'star';
                 
-                // Diferentes tipos de estrellas
                 const rand = Math.random();
                 if (rand > 0.9) {
                     star.classList.add('large');
@@ -611,11 +759,8 @@
                     star.classList.add('small');
                 }
                 
-                // Posición aleatoria
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                
-                // Delay aleatorio para la animación
                 star.style.animationDelay = Math.random() * 3 + 's';
                 star.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 
@@ -638,17 +783,6 @@
                     petal.remove();
                 }
             }, 15000);
-        }
-
-        // Inicializar estrellas al cargar la página
-        window.addEventListener('load', createStars);
-
-        // Crear pétalos cada 2 segundos
-        setInterval(createFloatingPetal, 2000);
-        
-        // Crear algunos pétalos iniciales
-        for(let i = 0; i < 5; i++) {
-            setTimeout(createFloatingPetal, i * 500);
         }
     </script>
 </body>

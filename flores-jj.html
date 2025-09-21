@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flores Amarillas Para JJ</title>
+    <title>Flores Amarillas Para MARIA JOSE</title>
     <style>
         * {
             margin: 0;
@@ -514,9 +514,67 @@
                 opacity: 0.8;
             }
         }
+
+        /* Estilos para el reproductor de música */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #FFD700;
+            border-radius: 50px;
+            padding: 15px 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #FFD700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        .music-icon {
+            font-size: 1.2rem;
+            animation: musicPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .music-control.muted .music-icon {
+            animation: none;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
+    <!-- Audio de fondo -->
+    <audio id="backgroundMusic" loop>
+        <source src="https://ia804608.us.archive.org/9/items/flores-amarillas/Flores%20Amarillas.mp3" type="audio/mpeg">
+        <source src="https://archive.org/download/floricienta-flores-amarillas/Floricienta%20-%20Flores%20Amarillas.mp3" type="audio/mpeg">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
+        Tu navegador no soporta audio HTML5.
+    </audio>
+
+    <!-- Control de música -->
+    <div class="music-control" id="musicControl" onclick="toggleMusic()">
+        <span class="music-icon" id="musicIcon">🎵</span>
+        <span id="musicText">Música</span>
+    </div>
+
     <div class="stars" id="stars"></div>
     
     <div class="shooting-stars">
@@ -528,7 +586,7 @@
     <div class="floating-petals" id="petals"></div>
     
     <div class="container">
-        <h1 class="title">Flores Amarillas</h1>
+        <h1 class="title"></h1>
         
         <div class="bouquet">
             <div class="flower">
@@ -588,10 +646,96 @@
             </div>
         </div>
         
-        <div class="message">Para ti JJ ❤️</div>
+        <div class="message">Para ti MARIA JOSE </div>
     </div>
 
     <script>
+        // Variables para el control de música
+        let isPlaying = false;
+        const audio = document.getElementById('backgroundMusic');
+        const musicControl = document.getElementById('musicControl');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+
+        // Función para reproducir/pausar música
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.textContent = '🔇';
+                musicText.textContent = 'Activar';
+                musicControl.classList.add('muted');
+                isPlaying = false;
+            } else {
+                audio.play().catch(e => {
+                    console.log('Error al reproducir audio:', e);
+                    showMusicPrompt();
+                });
+                musicIcon.textContent = '🎵';
+                musicText.textContent = 'Pausar';
+                musicControl.classList.remove('muted');
+                isPlaying = true;
+            }
+        }
+
+        // Mostrar prompt si el audio no se puede reproducir automáticamente
+        function showMusicPrompt() {
+            const prompt = document.createElement('div');
+            prompt.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(255, 215, 0, 0.95);
+                color: #0a0a23;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                z-index: 2000;
+                font-weight: bold;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            `;
+            prompt.innerHTML = `
+                <div>🎵 ¿Quieres escuchar música mientras ves las flores? 🎵</div>
+                <button onclick="startMusic(); this.parentElement.remove();" 
+                        style="margin: 10px; padding: 10px 20px; background: #FFD700; border: none; border-radius: 25px; cursor: pointer; font-weight: bold;">
+                    ¡Sí, activar música! ✨
+                </button>
+                <button onclick="this.parentElement.remove();" 
+                        style="margin: 10px; padding: 10px 20px; background: #ccc; border: none; border-radius: 25px; cursor: pointer;">
+                    No, gracias
+                </button>
+            `;
+            document.body.appendChild(prompt);
+        }
+
+        // Función para iniciar música desde el prompt
+        function startMusic() {
+            audio.play();
+            musicIcon.textContent = '🎵';
+            musicText.textContent = 'Pausar';
+            musicControl.classList.remove('muted');
+            isPlaying = true;
+        }
+
+        // Intentar reproducir música automáticamente al cargar la página
+        window.addEventListener('load', function() {
+            createStars();
+            setInterval(createFloatingPetal, 2000);
+            for(let i = 0; i < 5; i++) {
+                setTimeout(createFloatingPetal, i * 500);
+            }
+
+            setTimeout(() => {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    musicIcon.textContent = '🎵';
+                    musicText.textContent = 'Pausar';
+                }).catch(() => {
+                    console.log('Reproducción automática bloqueada por el navegador');
+                });
+            }, 2000);
+        });
+
         // Crear estrellas fijas
         function createStars() {
             const starsContainer = document.getElementById('stars');
@@ -601,7 +745,6 @@
                 const star = document.createElement('div');
                 star.className = 'star';
                 
-                // Diferentes tipos de estrellas
                 const rand = Math.random();
                 if (rand > 0.9) {
                     star.classList.add('large');
@@ -611,11 +754,8 @@
                     star.classList.add('small');
                 }
                 
-                // Posición aleatoria
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                
-                // Delay aleatorio para la animación
                 star.style.animationDelay = Math.random() * 3 + 's';
                 star.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 
@@ -638,17 +778,6 @@
                     petal.remove();
                 }
             }, 15000);
-        }
-
-        // Inicializar estrellas al cargar la página
-        window.addEventListener('load', createStars);
-
-        // Crear pétalos cada 2 segundos
-        setInterval(createFloatingPetal, 2000);
-        
-        // Crear algunos pétalos iniciales
-        for(let i = 0; i < 5; i++) {
-            setTimeout(createFloatingPetal, i * 500);
         }
     </script>
 </body>
