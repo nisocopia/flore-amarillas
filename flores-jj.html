@@ -533,6 +533,9 @@
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .music-control:hover {
@@ -543,6 +546,13 @@
         .music-icon {
             font-size: 1.2rem;
             animation: musicPulse 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .music-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         @keyframes musicPulse {
@@ -558,6 +568,62 @@
             animation: none;
             opacity: 0.5;
         }
+
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+            .music-control {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 16px;
+                font-size: 0.9rem;
+                max-width: 150px;
+                border-radius: 40px;
+            }
+            
+            .music-icon {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .music-control {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 14px;
+                font-size: 0.8rem;
+                max-width: 120px;
+                border-radius: 35px;
+            }
+            
+            .music-icon {
+                font-size: 1rem;
+            }
+            
+            .music-text {
+                display: none;
+            }
+            
+            .music-control::after {
+                content: attr(data-tooltip);
+                position: absolute;
+                bottom: 120%;
+                right: 0;
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 5px 10px;
+                border-radius: 15px;
+                font-size: 0.7rem;
+                white-space: nowrap;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+                transform: translateX(50%);
+            }
+            
+            .music-control:active::after {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -570,9 +636,9 @@
     </audio>
 
     <!-- Control de música -->
-    <div class="music-control" id="musicControl" onclick="toggleMusic()">
+    <div class="music-control" id="musicControl" onclick="toggleMusic()" data-tooltip="Flores Amarillas">
         <span class="music-icon" id="musicIcon">🎵</span>
-        <span id="musicText">Música</span>
+        <span class="music-text" id="musicText">Música</span>
     </div>
 
     <div class="stars" id="stars"></div>
